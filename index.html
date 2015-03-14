@@ -1,12 +1,110 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>DOTA Hero Tool</title>
-        <meta name="description" content="A tool that allows DOTA players to compare and contrast heroes to find the most optimal"
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="css/styles.css">
-        <script src="http://d3js.org/d3.v3.min.js"></script>
-        <script src="js/code.js"></script>
-        <script src="js/d3-starPlot.js"></script>
-    </head>
-</html>
+<!DOCTYPE>
+<meta charset="utf-8">
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="js/d3-starPlot.js"></script>
+<script>
+
+var margin = {
+  top: 32,
+  right: 50,
+  bottom: 20,
+  left: 50
+};
+var width = 240 - margin.left - margin.right;
+var height = 240 - margin.top - margin.bottom;
+var labelMargin = 8;
+
+var scale = d3.scale.linear()
+  .domain([0, 400])
+  .range([0, 100])
+
+d3.csv('test.csv')
+  .row(function(d) {
+      d.MS = +d.MS;
+      d.APS = +d.APS;
+      d.HP = +d.HP;
+      d.Armor = +d.Armor;
+      d.Mana = +d.Mana;
+      return d;
+  })
+  .get(function(error, rows) {
+    var star = d3.starPlot()
+      .width(width)
+      .properties([
+        'MS',
+        'APS',
+        'HP',
+        'Armor',
+        'Mana'
+      ])
+      .scales(scale)
+      .labels([
+        'MS',
+        'APS',
+        'HP',
+        'Armor',
+        'Mana'
+      ])
+      .title(function(d) { return d.Hero; })
+      .margin(margin)
+      .labelMargin(labelMargin)
+
+    rows.forEach(function(d, i) {
+      star.includeLabels(i % 4 === 0 ? true : false);
+
+      var wrapper = d3.select('#target').append('div')
+        .attr('class', 'wrapper')
+
+      var svg = wrapper.append('svg')
+        .attr('class', 'chart')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', width + margin.top + margin.bottom)
+
+      var starG = svg.append('g')
+        .datum(d)
+        .call(star)
+        .call(star.interaction)
+
+      var interactionLabel = wrapper.append('div')
+        .attr('class', 'interaction label')
+
+      var circle = svg.append('circle')
+        .attr('class', 'interaction circle')
+        .attr('r', 5)
+
+      var interaction = wrapper.selectAll('.interaction')
+        .style('display', 'none');
+
+      svg.selectAll('.star-interaction')
+        .on('mouseover', function(d) {
+          svg.selectAll('.star-label')
+            .style('display', 'none')
+
+          interaction
+            .style('display', 'block')
+
+          circle
+            .attr('cx', d.x)
+            .attr('cy', d.y)
+
+          $interactionLabel = $(interactionLabel.node());
+          interactionLabel
+            .text(d.key + ': ' + d.datum[d.key])
+            .style('left', d.xExtent - ($interactionLabel.width() / 2))
+            .style('top', d.yExtent - ($interactionLabel.height() / 2))
+        })
+        .on('mouseout', function(d) {
+          interaction
+            .style('display', 'none')
+
+          svg.selectAll('.star-label')
+            .style('display', 'block')
+        })
+    });
+  });
+
+</script>
+<div id='target'></div>
+</body>
