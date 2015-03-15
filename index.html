@@ -12,17 +12,38 @@ var margin = {
   bottom: 20,
   left: 50
 };
-var width = 240 - margin.left - margin.right;
-var height = 240 - margin.top - margin.bottom;
+var width = 450 - margin.left - margin.right;
+var height = 450 - margin.top - margin.bottom;
 var labelMargin = 8;
 
-var scale = d3.scale.linear()
-  .domain([0, 400])
+var sMS = d3.scale.linear()
+  .domain([270, 335])
+  .range([0, 100])
+  
+var sDmg = d3.scale.linear()
+  .domain([30, 85])
+  .range([0, 100])
+  
+var sAPS = d3.scale.linear()
+  .domain([0.605, 0.9])
+  .range([0, 100])
+  
+var sHP = d3.scale.linear()
+  .domain([416, 701])
+  .range([0, 100])
+  
+var sArmor = d3.scale.linear()
+  .domain([-0.46, 7.08])
+  .range([0, 100])
+  
+var sMana = d3.scale.linear()
+  .domain([169, 377])
   .range([0, 100])
 
 d3.csv('test.csv')
   .row(function(d) {
       d.MS = +d.MS;
+	  d.Dmg = +d.Dmg;
       d.APS = +d.APS;
       d.HP = +d.HP;
       d.Armor = +d.Armor;
@@ -34,14 +55,23 @@ d3.csv('test.csv')
       .width(width)
       .properties([
         'MS',
+		'Dmg',
         'APS',
         'HP',
         'Armor',
         'Mana'
       ])
-      .scales(scale)
+      .scales([
+	  sMS,
+	  sDmg,
+	  sAPS,
+	  sHP,
+	  sArmor,
+	  sMana
+	  ])
       .labels([
         'MS',
+		'Damage',
         'APS',
         'HP',
         'Armor',
