@@ -1,4 +1,0 @@
-Hero,MS,Dmg,APS,HP,Armor,Mana,Ranged,Range,STR,AGI,INT,PStat,Dvis,Nvis,Trate
-Abaddon,310,60,0.688,587,1.38,273,N,,23,17,21,STR,1800,800,0.6
-Alchemist,295,53.5,0.653,625,1.54,325,N,,25,11,25,STR,1800,800,0.6
-Ancient Apparition,295,49,0.706,492,1.8,325,Y,600,18,20,25,INT,1800,800,0.6

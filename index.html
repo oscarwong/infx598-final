@@ -7,6 +7,23 @@
 <link rel="stylesheet" type="text/css" href="css/styles.css">
 <script>
 
+  d3.csv("data.csv", function(error, data) {
+    
+    var select = d3.select('#select').append("div").append("select")
+
+    select
+      .on("change", function(d) {
+        var value = d3.select(this).property("value");
+        change(value);
+      });
+
+    select.selectAll("option")
+      .data(data)
+      .enter()
+        .append("option")
+        .attr("value", function (d) { return d.value; })
+        .text(function (d) { return d.Hero; });
+  });
 var margin = {
   top: 32,
   right: 50,
@@ -41,7 +58,7 @@ var sMana = d3.scale.linear()
   .domain([169, 377])
   .range([0, 100])
 
-d3.csv('test.csv')
+d3.csv('data.csv')
   .row(function(d) {
       d.MS = +d.MS;
 	  d.Dmg = +d.Dmg;
@@ -136,6 +153,11 @@ d3.csv('test.csv')
     });
   });
 
+  function change(value) {
+	
+  }
+  
 </script>
+<div id='select'></div>
 <div id='target'></div>
 </body>
