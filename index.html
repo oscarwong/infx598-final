@@ -24,14 +24,16 @@
         .attr("value", function (d) { return d.value; })
         .text(function (d) { return d.Hero; });
   });
+  
+  
 var margin = {
   top: 32,
   right: 50,
   bottom: 20,
   left: 50
 };
-var width = 450 - margin.left - margin.right;
-var height = 450 - margin.top - margin.bottom;
+var width = 300 - margin.left - margin.right;
+var height = 300 - margin.top - margin.bottom;
 var labelMargin = 8;
 
 var sMS = d3.scale.linear()
@@ -88,9 +90,9 @@ d3.csv('data.csv')
 	  sMana
 	  ])
       .labels([
-        'MS',
-		'Damage',
-        'APS',
+        'Movespeed',
+		'Base Damage',
+        'Attacks Per Second',
         'HP',
         'Armor',
         'Mana'
@@ -100,7 +102,7 @@ d3.csv('data.csv')
       .labelMargin(labelMargin)
 
     rows.forEach(function(d, i) {
-      star.includeLabels(i % 4 === 0 ? true : false);
+      star.includeLabels(i % 3 === 0 ? true : false);
 
       var wrapper = d3.select('#target').append('div')
         .attr('class', 'wrapper')
